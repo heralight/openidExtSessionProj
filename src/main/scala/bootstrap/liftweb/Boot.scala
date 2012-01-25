@@ -38,16 +38,16 @@ class Boot {
 //    }
     // where to search snippet
     LiftRules.addToPackages("openidExtSessionProj")
-    Schemifier.schemify(true, Schemifier.infoF _, User, MyOpenIDUser, ExtSession)
+    Schemifier.schemify(true, Schemifier.infoF _, User, ExtSession)
 
     // Build SiteMap
     def sitemap() = SiteMap(
-      Menu("Home") / "index" >> User.AddUserMenusAfter >> MyOpenIDUser.AddUserMenusAfter, // Simple menu form
+      Menu("Home") / "index" >> User.AddUserMenusAfter, // Simple menu form
       // Menu with special Link
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
 	       "Static Content")))
 
-    LiftRules.setSiteMapFunc(() => MyOpenIDUser.sitemapMutator( User.sitemapMutator(sitemap())))
+    LiftRules.setSiteMapFunc(() => User.sitemapMutator(sitemap()))
 
 
     LiftRules.dispatch.append(MyVendor.dispatchPF)
@@ -66,7 +66,7 @@ class Boot {
 
     LiftRules.early.append(makeUtf8)
 
-    LiftRules.loggedInTest = Full(() => User.loggedIn_? || MyOpenIDUser.loggedIn_?)
+    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
     S.addAround(DB.buildLoanWrapper)
 
